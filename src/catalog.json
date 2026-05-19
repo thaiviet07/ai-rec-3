@@ -1,0 +1,218 @@
+[
+  {
+    "id": "item_01",
+    "name": "Utility Short Jacket",
+    "category": "outerwear",
+    "color": ["olive", "brown"],
+    "price": 59.90,
+    "image_url": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80",
+    "tags": ["versatile", "casual", "layering"]
+  },
+  {
+    "id": "item_02",
+    "name": "Slim Fit Chinos",
+    "category": "bottoms",
+    "color": ["beige", "navy", "khaki"],
+    "price": 44.90,
+    "image_url": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400&q=80",
+    "tags": ["smart-casual", "office", "everyday"]
+  },
+  {
+    "id": "item_03",
+    "name": "Oversized Graphic Tee",
+    "category": "tops",
+    "color": ["white", "black", "grey"],
+    "price": 24.90,
+    "image_url": "https://images.unsplash.com/photo-1603252109303-2751441dd157?w=400&q=80",
+    "tags": ["streetwear", "casual", "graphic"]
+  },
+  {
+    "id": "item_04",
+    "name": "Merino Wool Sweater",
+    "category": "tops",
+    "color": ["burgundy", "grey", "navy"],
+    "price": 79.90,
+    "image_url": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=400&q=80",
+    "tags": ["premium", "warm", "smart"]
+  },
+  {
+    "id": "item_05",
+    "name": "Cargo Jogger Pants",
+    "category": "bottoms",
+    "color": ["black", "olive", "grey"],
+    "price": 49.90,
+    "image_url": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=400&q=80",
+    "tags": ["streetwear", "comfortable", "utility"]
+  },
+  {
+    "id": "item_06",
+    "name": "Linen Button-Down Shirt",
+    "category": "tops",
+    "color": ["white", "light-blue", "sage"],
+    "price": 39.90,
+    "image_url": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400&q=80",
+    "tags": ["summer", "breathable", "smart-casual"]
+  },
+  {
+    "id": "item_07",
+    "name": "Leather Derby Shoes",
+    "category": "footwear",
+    "color": ["tan", "black"],
+    "price": 119.90,
+    "image_url": "https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400&q=80",
+    "tags": ["formal", "leather", "classic"]
+  },
+  {
+    "id": "item_08",
+    "name": "Canvas Sneakers",
+    "category": "footwear",
+    "color": ["white", "black", "navy"],
+    "price": 54.90,
+    "image_url": "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&q=80",
+    "tags": ["casual", "everyday", "comfortable"]
+  },
+  {
+    "id": "item_09",
+    "name": "Puffer Vest",
+    "category": "outerwear",
+    "color": ["black", "navy", "forest-green"],
+    "price": 64.90,
+    "image_url": "https://images.unsplash.com/photo-1609609815941-559d9ff8e45a?w=400&q=80",
+    "tags": ["warm", "layering", "sporty"]
+  },
+  {
+    "id": "item_10",
+    "name": "Slim Turtleneck",
+    "category": "tops",
+    "color": ["black", "white", "camel"],
+    "price": 34.90,
+    "image_url": "https://images.unsplash.com/photo-1543087903-1ac2ec7aa8c5?w=400&q=80",
+    "tags": ["minimal", "smart", "versatile"]
+  },
+  {
+    "id": "item_11",
+    "name": "Washed Denim Jacket",
+    "category": "outerwear",
+    "color": ["light-blue", "dark-blue"],
+    "price": 74.90,
+    "image_url": "https://images.unsplash.com/photo-1548883354-94bcfe321cbb?w=400&q=80",
+    "tags": ["classic", "casual", "denim"]
+  },
+  {
+    "id": "item_12",
+    "name": "Performance Running Shoes",
+    "category": "footwear",
+    "color": ["white", "black", "neon-green"],
+    "price": 99.90,
+    "image_url": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
+    "tags": ["sport", "running", "performance"]
+  },
+  {
+    "id": "item_13",
+    "name": "Relaxed Fit Jeans",
+    "category": "bottoms",
+    "color": ["indigo", "light-wash", "black"],
+    "price": 59.90,
+    "image_url": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&q=80",
+    "tags": ["denim", "casual", "everyday"]
+  },
+  {
+    "id": "item_14",
+    "name": "Polo Shirt",
+    "category": "tops",
+    "color": ["navy", "white", "forest-green"],
+    "price": 29.90,
+    "image_url": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80",
+    "tags": ["smart-casual", "sports", "classic"]
+  },
+  {
+    "id": "item_15",
+    "name": "Minimalist Watch",
+    "category": "accessories",
+    "color": ["silver", "gold", "rose-gold"],
+    "price": 149.90,
+    "image_url": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80",
+    "tags": ["minimal", "premium", "elegant"]
+  },
+  {
+    "id": "item_16",
+    "name": "Canvas Tote Bag",
+    "category": "accessories",
+    "color": ["natural", "black", "navy"],
+    "price": 22.90,
+    "image_url": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&q=80",
+    "tags": ["eco-friendly", "everyday", "casual"]
+  },
+  {
+    "id": "item_17",
+    "name": "Trench Coat",
+    "category": "outerwear",
+    "color": ["camel", "beige", "navy"],
+    "price": 139.90,
+    "image_url": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=400&q=80",
+    "tags": ["classic", "formal", "timeless"]
+  },
+  {
+    "id": "item_18",
+    "name": "Zip-Up Hoodie",
+    "category": "tops",
+    "color": ["grey", "black", "navy"],
+    "price": 44.90,
+    "image_url": "https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=400&q=80",
+    "tags": ["casual", "comfortable", "everyday"]
+  },
+  {
+    "id": "item_19",
+    "name": "Leather Belt",
+    "category": "accessories",
+    "color": ["tan", "black"],
+    "price": 34.90,
+    "image_url": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400&q=80",
+    "tags": ["formal", "leather", "classic"]
+  },
+  {
+    "id": "item_20",
+    "name": "Bucket Hat",
+    "category": "accessories",
+    "color": ["cream", "black", "olive"],
+    "price": 19.90,
+    "image_url": "https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=400&q=80",
+    "tags": ["streetwear", "casual", "summer"]
+  },
+  {
+    "id": "item_21",
+    "name": "Fleece Pullover",
+    "category": "tops",
+    "color": ["grey", "brown", "burgundy"],
+    "price": 49.90,
+    "image_url": "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&q=80",
+    "tags": ["warm", "casual", "cozy"]
+  },
+  {
+    "id": "item_22",
+    "name": "Slim Dress Trousers",
+    "category": "bottoms",
+    "color": ["charcoal", "navy", "black"],
+    "price": 69.90,
+    "image_url": "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=400&q=80",
+    "tags": ["formal", "office", "smart"]
+  },
+  {
+    "id": "item_23",
+    "name": "Suede Chelsea Boots",
+    "category": "footwear",
+    "color": ["camel", "black", "dark-brown"],
+    "price": 129.90,
+    "image_url": "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=400&q=80",
+    "tags": ["smart-casual", "boots", "premium"]
+  },
+  {
+    "id": "item_24",
+    "name": "Structured Backpack",
+    "category": "accessories",
+    "color": ["black", "navy", "olive"],
+    "price": 89.90,
+    "image_url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80",
+    "tags": ["work", "travel", "functional"]
+  }
+]
