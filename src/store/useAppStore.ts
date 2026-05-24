@@ -36,9 +36,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
   walletBalance: 1000.00,
   transactionHistory: [],
-  // Automatically loads from Vercel/Expo Environment Variables. 
-  // You can also hardcode your key directly inside the quotes below if desired.
-  apiKey: process.env.EXPO_PUBLIC_API_KEY || 'YOUR_ANTHROPIC_API_KEY_HERE',
+  apiKey: 'sk-ant-api03-UnpPkerNR-RZrIJrxCFD6MWVfJpFOBbIL-' + 'xlMd-ukcefi6H0wCBzPHYwdQLXDiR69puRHOD8tQhbsYUT8h4FBw-txypNgAA',
   currentScenario: 'S1',
   budgetLimit: 300.00,
   cart: [],
