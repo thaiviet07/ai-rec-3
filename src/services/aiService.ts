@@ -62,7 +62,7 @@ const SHOPPING_TOOL: Anthropic.Tool = {
 };
 
 export async function callShoppingAI(
-  userMessage: string,
+  chatHistory: { role: 'user' | 'assistant' | 'system'; content: string }[],
   scenario: ScenarioId,
   walletBalance: number,
   apiKey: string
@@ -75,32 +75,48 @@ export async function callShoppingAI(
 
   const systemPrompt = `${SCENARIO_SYSTEM_PROMPTS[scenario]}
 
-Universal Context: You are a shopping assistant. User balance is $${walletBalance.toFixed(2)}. You MUST call the execute_shopping_decision tool. Do NOT respond with plain text.
+Universal Context: You are a style consultant and shopping companion. User balance is $${walletBalance.toFixed(2)}. 
+You can interact in two ways depending on the user's input:
+1. CONVERSATIONAL CHAT & CONSULTATION: If the user is greeting you, asking general style advice, consulting about layouts, suggesting matching colors, or chatting without asking to buy a specific product, respond naturally in plain conversational text. Do NOT call the tool in this case.
+2. SHOPPING DECISION & PURCHASE: Call the 'execute_shopping_decision' tool ONLY when the user makes a clear request to buy/purchase/order a product, or when you are recommending a specific item to buy.
 
 Available catalog:
 ${catalogSummary}
 
-Match the user's request to the most relevant product. Always use a real product ID from the catalog.`;
+Provide tailored advice, styling suggestions, and layout matching ideas. Always use a real product ID from the catalog when making an official recommendation tool call.`;
+
+  // Filter out system messages and format for Anthropic API
+  const apiMessages = chatHistory
+    .filter((m) => m.role === 'user' || m.role === 'assistant')
+    .map((m) => ({
+      role: m.role as 'user' | 'assistant',
+      content: m.content,
+    }));
 
   const response = await client.messages.create({
     model: 'claude-haiku-4-5-20251001',
     max_tokens: 1024,
     system: systemPrompt,
-    messages: [
-      { role: 'user', content: userMessage },
-    ],
+    messages: apiMessages,
     tools: [SHOPPING_TOOL],
-    tool_choice: { type: 'tool', name: 'execute_shopping_decision' },
+    tool_choice: { type: 'auto' }, // Let Claude decide whether to chat or execute a purchase
   });
 
   const toolCall = response.content.find(
     (c) => c.type === 'tool_use' && c.name === 'execute_shopping_decision'
   ) as Anthropic.ToolUseBlock | undefined;
 
-  if (!toolCall) {
-    throw new Error('AI did not return a valid shopping decision tool use.');
+  if (toolCall) {
+    const decision = toolCall.input as unknown as ShoppingDecision;
+    return decision;
   }
 
-  const decision = toolCall.input as unknown as ShoppingDecision;
-  return decision;
+  // Fallback to text blocks for conversational consulting
+  const textBlock = response.content.find((c) => c.type === 'text') as Anthropic.TextBlock | undefined;
+  const aiMessage = textBlock ? textBlock.text : "I am here to consult with you on styles, suggest relevant matches, or place an order. How can I help you today?";
+
+  return {
+    action_type: 'chat_only',
+    ai_message: aiMessage,
+  };
 }

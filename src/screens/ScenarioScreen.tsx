@@ -160,7 +160,19 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     try {
-      const decision = await callShoppingAI(text, scenarioId, walletBalance, apiKey);
+      const historyToSend = [
+        ...messages.map((m) => ({ role: m.role, content: m.content })),
+        { role: 'user' as const, content: text }
+      ];
+
+      const decision = await callShoppingAI(historyToSend, scenarioId, walletBalance, apiKey);
+
+      if (decision.action_type === 'chat_only') {
+        addMessage({ role: 'assistant', content: decision.ai_message });
+        setIsLoading(false);
+        return;
+      }
+
       const product = catalog.find((p) => p.id === decision.matched_product_id);
 
       if (!product) {
