@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   keyInput: {
     flex: 1,
     color: '#0F172A',
-    fontSize: 13,
+    fontSize: 16, // Prevent mobile browsers from zooming in on focus
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',

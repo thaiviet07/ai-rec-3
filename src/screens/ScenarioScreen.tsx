@@ -160,19 +160,7 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     try {
-      const historyToSend = [
-        ...messages.map((m) => ({ role: m.role, content: m.content })),
-        { role: 'user' as const, content: text }
-      ];
-
-      const decision = await callShoppingAI(historyToSend, scenarioId, walletBalance, apiKey);
-
-      if (decision.action_type === 'chat_only') {
-        addMessage({ role: 'assistant', content: decision.ai_message });
-        setIsLoading(false);
-        return;
-      }
-
+      const decision = await callShoppingAI(text, scenarioId, walletBalance, apiKey);
       const product = catalog.find((p) => p.id === decision.matched_product_id);
 
       if (!product) {
@@ -623,9 +611,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 8,
     color: '#0F172A',
-    fontSize: 13.5,
+    fontSize: 16, // Prevent mobile browsers (especially Safari) from auto-zooming on focus
     fontFamily: APPLE_FONT,
-    lineHeight: 18,
+    lineHeight: 20,
     maxHeight: 80,
   },
   sendBtn: {
