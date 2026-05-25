@@ -80,8 +80,8 @@ ${catalogSummary}
 
 Match the user's request to the most relevant product. Always use a real product ID from the catalog.`;
 
-  // Make direct fetch call to bypass standard SDK's React Native/Hermes Headers.filter polyfill crashes
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  // Route through a CORS proxy to bypass browser cross-origin policy blockages on client-side requests
+  const response = await fetch('https://corsproxy.io/?url=https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
       'x-api-key': apiKey,
