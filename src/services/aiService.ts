@@ -80,17 +80,28 @@ ${catalogSummary}
 
 Match the user's request to the most relevant product. Always use a real product ID from the catalog.`;
 
-  // Route through corsproxy.io universally to bypass browser CORS blockages and avoid Vercel cloud server IP bans from Anthropic
-  const apiEndpoint = 'https://corsproxy.io/?url=https://api.anthropic.com/v1/messages';
+  // Check if we are running online in production on Vercel or in local Metro dev mode
+  const isVercel = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+
+  // Use Vercel's secure built-in server-side API proxy function in production, or corsproxy.io in local Metro dev mode
+  const apiEndpoint = isVercel
+    ? `${window.location.origin}/api/chat`
+    : 'https://corsproxy.io/?url=https://api.anthropic.com/v1/messages';
+
+  const headers: Record<string, string> = {
+    'content-type': 'application/json',
+  };
+
+  if (!isVercel) {
+    // Only send direct Anthropic headers when calling the CORS proxy in local development
+    headers['x-api-key'] = apiKey;
+    headers['anthropic-version'] = '2023-06-01';
+    headers['anthropic-dangerous-direct-browser-access'] = 'true';
+  }
 
   const response = await fetch(apiEndpoint, {
     method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
+    headers,
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,
