@@ -80,13 +80,8 @@ ${catalogSummary}
 
 Match the user's request to the most relevant product. Always use a real product ID from the catalog.`;
 
-  // Check if we are running online in production on Vercel or in local Metro dev mode
-  const isVercel = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-  
-  // Use Vercel's secure built-in server-side rewrite proxy in production, or corsproxy.io as local dev fallback
-  const apiEndpoint = isVercel 
-    ? `${window.location.origin}/api/anthropic/v1/messages` 
-    : 'https://corsproxy.io/?url=https://api.anthropic.com/v1/messages';
+  // Route through corsproxy.io universally to bypass browser CORS blockages and avoid Vercel cloud server IP bans from Anthropic
+  const apiEndpoint = 'https://corsproxy.io/?url=https://api.anthropic.com/v1/messages';
 
   const response = await fetch(apiEndpoint, {
     method: 'POST',
