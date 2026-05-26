@@ -58,6 +58,7 @@ export default function Home() {
 
     let autonomy: 'High' | 'Low' = 'Low';
     let teaming = false;
+    let scenarioId = '';
 
     if (study === 'study1') {
       const scenario = getStudy1Assignment();
