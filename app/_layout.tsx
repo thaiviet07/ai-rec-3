@@ -15,6 +15,14 @@ export default function RootLayout() {
         <Stack.Screen name="scenario2" />
         <Stack.Screen name="scenario3" />
         <Stack.Screen name="scenario4" />
+        {/* Study 1: Autonomy (Low × High) — 2 scenarios */}
+        <Stack.Screen name="study1" />
+        <Stack.Screen name="study1-chat" />
+        {/* Study 2: Autonomy × Teaming (2×2) — 4 scenarios */}
+        <Stack.Screen name="study2" />
+        <Stack.Screen name="study2-chat" />
+        {/* Research Analytics & Tracking Dashboard */}
+        <Stack.Screen name="dashboard" />
       </Stack>
     </SafeAreaProvider>
   );

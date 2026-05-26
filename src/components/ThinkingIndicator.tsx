@@ -1,115 +1,122 @@
 import React, { useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet, Animated, Platform } from 'react-native';
 
-function AssistantLogo() {
-  return (
-    <View style={styles.assistantLogo}>
-      <View style={styles.logoWing} />
-      <View style={styles.logoSlash} />
-    </View>
-  );
-}
+const APPLE_FONT = Platform.OS === 'ios'
+  ? 'System'
+  : '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif';
 
 export default function ThinkingIndicator() {
   const dot1 = useRef(new Animated.Value(0)).current;
   const dot2 = useRef(new Animated.Value(0)).current;
   const dot3 = useRef(new Animated.Value(0)).current;
+  const fadeIn = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    Animated.timing(fadeIn, { toValue: 1, duration: 300, useNativeDriver: true }).start();
+
     const animate = (dot: Animated.Value, delay: number) =>
       Animated.loop(
         Animated.sequence([
           Animated.delay(delay),
-          Animated.timing(dot, { toValue: -4, duration: 260, useNativeDriver: true }),
-          Animated.timing(dot, { toValue: 0, duration: 260, useNativeDriver: true }),
-          Animated.delay(520),
+          Animated.timing(dot, { toValue: -5, duration: 300, useNativeDriver: true }),
+          Animated.timing(dot, { toValue: 0, duration: 300, useNativeDriver: true }),
+          Animated.delay(400),
         ])
       );
 
     animate(dot1, 0).start();
-    animate(dot2, 160).start();
-    animate(dot3, 320).start();
-  }, [dot1, dot2, dot3]);
+    animate(dot2, 150).start();
+    animate(dot3, 300).start();
+  }, [dot1, dot2, dot3, fadeIn]);
 
   const dotStyle = (anim: Animated.Value) => ({
-    width: 5,
-    height: 5,
+    width: 6,
+    height: 6,
     borderRadius: 3,
-    backgroundColor: '#6E6D62',
+    backgroundColor: '#94A3B8',
     transform: [{ translateY: anim }],
-    opacity: 0.75,
   });
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity: fadeIn }]}>
       <View style={styles.avatar}>
-        <AssistantLogo />
+        <Text style={styles.avatarText}>o</Text>
+        <View style={styles.avatarDot} />
       </View>
       <View style={styles.bubble}>
-        <Text style={styles.label}>typing</Text>
+        <Text style={styles.label}>onmi is thinking</Text>
         <View style={styles.dots}>
           <Animated.View style={dotStyle(dot1)} />
           <Animated.View style={dotStyle(dot2)} />
           <Animated.View style={dotStyle(dot3)} />
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingVertical: 8,
     gap: 8,
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F7F6EA',
+    backgroundColor: '#0F172A',
+    flexDirection: 'row',
+    gap: 1,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 1,
   },
-  assistantLogo: {
-    width: 25,
-    height: 21,
-    justifyContent: 'center',
+  avatarText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '900',
+    lineHeight: 18,
   },
-  logoWing: {
-    width: 20,
-    height: 8,
+  avatarDot: {
+    width: 4,
+    height: 4,
     borderRadius: 2,
-    backgroundColor: '#F7A600',
-    transform: [{ skewX: '-22deg' }],
-  },
-  logoSlash: {
-    width: 9,
-    height: 22,
-    borderRadius: 2,
-    backgroundColor: '#11111F',
-    position: 'absolute',
-    right: 1,
-    transform: [{ skewX: '-22deg' }],
+    backgroundColor: '#3B82F6',
+    alignSelf: 'flex-end',
+    marginBottom: 2,
   },
   bubble: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#EFEEE4',
-    borderRadius: 10,
-    paddingHorizontal: 14,
+    gap: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    borderBottomLeftRadius: 4,
+    paddingHorizontal: 16,
     paddingVertical: 12,
+    borderWidth: 0.5,
+    borderColor: '#E2E8F0',
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.02,
+    shadowRadius: 6,
+    elevation: 1,
   },
   label: {
-    color: '#5D5C53',
-    fontSize: 13,
+    color: '#94A3B8',
+    fontSize: 12,
     fontWeight: '700',
+    fontFamily: APPLE_FONT,
   },
   dots: {
     flexDirection: 'row',
-    gap: 3,
-    alignItems: 'flex-end',
+    gap: 4,
+    alignItems: 'center',
   },
 });

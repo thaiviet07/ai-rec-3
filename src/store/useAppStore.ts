@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { ScenarioId } from '../services/aiService';
 
 export interface Transaction {
   id: string;
@@ -19,18 +20,20 @@ interface AppState {
   walletBalance: number;
   transactionHistory: Transaction[];
   apiKey: string;
-  currentScenario: 'S1' | 'S2' | 'S3' | 'S4';
+  currentScenario: ScenarioId;
   budgetLimit: number;
   cart: CartItem[];
+  sessionId: string | null;
   deductFunds: (amount: number, tx: Omit<Transaction, 'id' | 'timestamp'>) => void;
   resetWallet: () => void;
   setApiKey: (key: string) => void;
-  setCurrentScenario: (scenario: 'S1' | 'S2' | 'S3' | 'S4') => void;
+  setCurrentScenario: (scenario: ScenarioId) => void;
   setBudgetLimit: (limit: number) => void;
   addToCart: (product: any) => void;
   removeFromCart: (productId: string) => void;
   clearCart: () => void;
   addConfirmedTransaction: (tx: Omit<Transaction, 'id' | 'timestamp'>) => void;
+  setSessionId: (id: string | null) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -40,6 +43,7 @@ export const useAppStore = create<AppState>((set) => ({
   currentScenario: 'S1',
   budgetLimit: 300.00,
   cart: [],
+  sessionId: null,
 
   deductFunds: (amount, tx) =>
     set((state) => ({
@@ -95,4 +99,5 @@ export const useAppStore = create<AppState>((set) => ({
       cart: state.cart.filter((item) => item.product.id !== productId),
     })),
   clearCart: () => set({ cart: [] }),
+  setSessionId: (id) => set({ sessionId: id }),
 }));

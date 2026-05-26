@@ -23,6 +23,7 @@ import WalletHeader from '../components/WalletHeader';
 import { callShoppingAI, ScenarioId } from '../services/aiService';
 import { useAppStore } from '../store/useAppStore';
 import catalog from '../catalog.json';
+import { logToKnack } from '../services/knackService';
 
 export interface ScenarioConfig {
   id: ScenarioId;
@@ -38,6 +39,7 @@ export interface ScenarioConfig {
 const APPLE_FONT = Platform.OS === 'ios' ? 'System' : '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif';
 
 const SCENARIO_CONFIGS: Record<ScenarioId, ScenarioConfig> = {
+  // ====== ORIGINAL SCENARIOS (backward compatible) ======
   S1: {
     id: 'S1',
     label: 'S1',
@@ -78,6 +80,70 @@ const SCENARIO_CONFIGS: Record<ScenarioId, ScenarioConfig> = {
     agentName: 'onmi AI',
     systemLabel: 'Low Autonomy + No Team',
   },
+
+  // ====== STUDY 1: Autonomy Only (No Teaming) ======
+  S1_LOW: {
+    id: 'S1_LOW',
+    label: 'Study 1 — Low',
+    description: 'onmi recommends, you decide',
+    accentColor: '#0EA5E9',
+    autonomy: 'Low',
+    teaming: false,
+    agentName: 'onmi AI',
+    systemLabel: 'Low Autonomy',
+  },
+  S1_HIGH: {
+    id: 'S1_HIGH',
+    label: 'Study 1 — High',
+    description: 'onmi auto-purchases independently',
+    accentColor: '#0F172A',
+    autonomy: 'High',
+    teaming: false,
+    agentName: 'onmi Autonomous',
+    systemLabel: 'High Autonomy',
+  },
+
+  // ====== STUDY 2: Autonomy × Teaming (2×2) ======
+  S2_HL: {
+    id: 'S2_HL',
+    label: 'Study 2 — HL',
+    description: 'onmi auto-purchases independently',
+    accentColor: '#1E3A8A',
+    autonomy: 'High',
+    teaming: false,
+    agentName: 'onmi Autonomous',
+    systemLabel: 'High Autonomy + No Team',
+  },
+  S2_HH: {
+    id: 'S2_HH',
+    label: 'Study 2 — HH',
+    description: 'onmi auto-purchases with agent Ngoc Linh review',
+    accentColor: '#0F172A',
+    autonomy: 'High',
+    teaming: true,
+    agentName: 'onmi + Ngoc Linh',
+    systemLabel: 'High Autonomy + Teaming',
+  },
+  S2_LL: {
+    id: 'S2_LL',
+    label: 'Study 2 — LL',
+    description: 'onmi recommends, you decide',
+    accentColor: '#0EA5E9',
+    autonomy: 'Low',
+    teaming: false,
+    agentName: 'onmi AI',
+    systemLabel: 'Low Autonomy + No Team',
+  },
+  S2_LH: {
+    id: 'S2_LH',
+    label: 'Study 2 — LH',
+    description: 'onmi recommends, Ngoc Linh assists',
+    accentColor: '#2563EB',
+    autonomy: 'Low',
+    teaming: true,
+    agentName: 'onmi + Ngoc Linh',
+    systemLabel: 'Low Autonomy + Teaming',
+  },
 };
 
 interface DecisionState {
@@ -95,7 +161,7 @@ interface ScenarioScreenProps {
 
 export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
   const config = SCENARIO_CONFIGS[scenarioId];
-  const { walletBalance, apiKey, deductFunds, addConfirmedTransaction, budgetLimit } = useAppStore();
+  const { walletBalance, apiKey, deductFunds, addConfirmedTransaction, budgetLimit, sessionId } = useAppStore();
 
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -156,6 +222,26 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
 
     setInputText('');
     addMessage({ role: 'user', content: text });
+    
+    const studyType = scenarioId.startsWith('S2_') || ['S2', 'S3', 'S4'].includes(scenarioId) ? 'study2' : 'study1';
+    
+    if (sessionId) {
+      logToKnack({
+        sessionId,
+        study: studyType,
+        scenario: scenarioId,
+        autonomyLevel: config.autonomy,
+        teaming: config.teaming,
+        eventType: 'MESSAGE_SENT',
+        details: {
+          text,
+          charCount: text.length,
+          wordCount: text.split(/\s+/).length,
+        },
+        timestamp: new Date().toISOString(),
+      });
+    }
+    
     setIsLoading(true);
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
@@ -180,7 +266,26 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
         isGuardIntercepted = true;
       }
 
+      const studyType = scenarioId.startsWith('S2_') || ['S2', 'S3', 'S4'].includes(scenarioId) ? 'study2' : 'study1';
       const msgId = addMessage({ role: 'assistant', content: decision.ai_message });
+      
+      if (sessionId) {
+        logToKnack({
+          sessionId,
+          study: studyType,
+          scenario: scenarioId,
+          autonomyLevel: config.autonomy,
+          teaming: config.teaming,
+          eventType: 'MESSAGE_RECEIVED',
+          details: {
+            aiMessage: decision.ai_message,
+            actionType: targetActionType,
+            matchedProductId: product.id,
+            matchedPrice: product.price,
+          },
+          timestamp: new Date().toISOString(),
+        });
+      }
 
       if (isGuardIntercepted) {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
@@ -188,6 +293,24 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
           role: 'system',
           content: `⚠️ Wallet Guard Intercepted: Auto-purchase of "${product.name}" ($${product.price}) is blocked because it exceeds your safety budget limit of $${budgetLimit}. Converted to review only.`,
         });
+
+        if (sessionId) {
+          logToKnack({
+            sessionId,
+            study: studyType,
+            scenario: scenarioId,
+            autonomyLevel: config.autonomy,
+            teaming: config.teaming,
+            eventType: 'DECISION_ACTION',
+            details: {
+              action: 'GUARD_BLOCKED',
+              productId: product.id,
+              price: product.price,
+              walletBalanceAfter: walletBalance,
+            },
+            timestamp: new Date().toISOString(),
+          });
+        }
 
         setDecisions((prev) => [
           ...prev,
@@ -213,6 +336,24 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
           scenario: scenarioId,
           actionType: 'auto_purchase',
         });
+        
+        if (sessionId) {
+          logToKnack({
+            sessionId,
+            study: studyType,
+            scenario: scenarioId,
+            autonomyLevel: config.autonomy,
+            teaming: config.teaming,
+            eventType: 'DECISION_ACTION',
+            details: {
+              action: 'AUTO_PURCHASED',
+              productId: product.id,
+              price: product.price,
+              walletBalanceAfter: Math.max(0, walletBalance - product.price),
+            },
+            timestamp: new Date().toISOString(),
+          });
+        }
 
         setDecisions((prev) => [
           ...prev,
@@ -297,6 +438,25 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
         role: 'system',
         content: `Order successfully placed. Wallet updated: -$${product.price.toFixed(2)}`,
       });
+      
+      const studyType = scenarioId.startsWith('S2_') || ['S2', 'S3', 'S4'].includes(scenarioId) ? 'study2' : 'study1';
+      if (sessionId) {
+        logToKnack({
+          sessionId,
+          study: studyType,
+          scenario: scenarioId,
+          autonomyLevel: config.autonomy,
+          teaming: config.teaming,
+          eventType: 'DECISION_ACTION',
+          details: {
+            action: 'CONFIRMED',
+            productId: product.id,
+            price: product.price,
+            walletBalanceAfter: Math.max(0, walletBalance - product.price),
+          },
+          timestamp: new Date().toISOString(),
+        });
+      }
     },
     [decisions, scenarioId, addConfirmedTransaction, addMessage]
   );
@@ -310,6 +470,25 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
       setDecisions((prev) =>
         prev.map((d, i) => (i === decisionIdx ? { ...d, confirmed: false } : d))
       );
+      
+      const studyType = scenarioId.startsWith('S2_') || ['S2', 'S3', 'S4'].includes(scenarioId) ? 'study2' : 'study1';
+      if (sessionId) {
+        logToKnack({
+          sessionId,
+          study: studyType,
+          scenario: scenarioId,
+          autonomyLevel: config.autonomy,
+          teaming: config.teaming,
+          eventType: 'DECISION_ACTION',
+          details: {
+            action: 'DECLINED',
+            productId: declinedProduct?.id,
+            price: declinedProduct?.price,
+            walletBalanceAfter: walletBalance,
+          },
+          timestamp: new Date().toISOString(),
+        });
+      }
 
       addMessage({
         role: 'system',

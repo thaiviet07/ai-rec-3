@@ -31,6 +31,9 @@ export default function WalletHeader({ scenarioLabel, scenarioColor }: WalletHea
     ]).start();
   }, [pulseAnim, walletBalance]);
 
+  // Determine if this is a study scenario (shouldn't show back/settings)
+  const isStudyScenario = scenarioLabel.startsWith('Study');
+
   const handleReset = () => {
     Alert.alert('Reset Wallet', 'Reset balance to $1,000.00 and clear history?', [
       { text: 'Cancel', style: 'cancel' },
@@ -41,10 +44,12 @@ export default function WalletHeader({ scenarioLabel, scenarioColor }: WalletHea
   return (
     <View style={styles.container}>
       <View style={styles.brandBlock}>
-        {/* Apple Back Button */}
-        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()} accessibilityLabel="Back to home">
-          <Ionicons name="chevron-back" size={22} color="#0F172A" />
-        </TouchableOpacity>
+        {/* Back button — only for non-study scenarios */}
+        {!isStudyScenario && (
+          <TouchableOpacity style={styles.backBtn} onPress={() => router.back()} accessibilityLabel="Back to home">
+            <Ionicons name="chevron-back" size={22} color="#0F172A" />
+          </TouchableOpacity>
+        )}
 
         <View style={styles.logoTile}>
           <Text style={styles.logoText}>onmi</Text>
@@ -70,10 +75,12 @@ export default function WalletHeader({ scenarioLabel, scenarioColor }: WalletHea
           <Ionicons name="refresh-outline" size={16} color="#64748B" />
         </TouchableOpacity>
 
-        {/* Apple settings cog button */}
-        <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/settings')} accessibilityLabel="Open chat settings">
-          <Ionicons name="settings-outline" size={16} color="#64748B" />
-        </TouchableOpacity>
+        {/* Settings button — only for non-study scenarios */}
+        {!isStudyScenario && (
+          <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/settings')} accessibilityLabel="Open chat settings">
+            <Ionicons name="settings-outline" size={16} color="#64748B" />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     backgroundColor: '#FFFFFF',
-    borderBottomWidth: 0.5, // Thin Apple Border
+    borderBottomWidth: 0.5,
     borderBottomColor: '#E2E8F0',
   },
   brandBlock: {
@@ -112,7 +119,7 @@ const styles = StyleSheet.create({
   },
   logoText: {
     fontSize: 20,
-    fontWeight: '800', // Apple Bold
+    fontWeight: '800',
     color: '#0F172A',
     fontFamily: APPLE_FONT,
     letterSpacing: -0.8,
