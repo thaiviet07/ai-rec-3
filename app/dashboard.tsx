@@ -254,7 +254,7 @@ export default function Dashboard() {
 
             <View style={styles.metricCard}>
               <View style={[styles.metricIconWrap, { backgroundColor: '#FEF2F2' }]}>
-                <Ionicons name="shield-alert" size={20} color="#EF4444" />
+                <Ionicons name="alert-circle-outline" size={20} color="#EF4444" />
               </View>
               <Text style={styles.metricVal}>{stats.blocks}</Text>
               <Text style={styles.metricLabel}>Safety Blocks</Text>

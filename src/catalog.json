@@ -214,5 +214,59 @@
     "price": 89.90,
     "image_url": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80",
     "tags": ["work", "travel", "functional"]
+  },
+  {
+    "id": "item_25",
+    "name": "Versatile Brown Jacket",
+    "category": "outerwear",
+    "color": ["brown"],
+    "price": 47.90,
+    "image_url": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80",
+    "tags": ["versatile", "comfortable", "jacket", "comfort"]
+  },
+  {
+    "id": "item_26",
+    "name": "Leather Card Holder",
+    "category": "accessories",
+    "color": ["black", "brown"],
+    "price": 29.90,
+    "image_url": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=400&q=80",
+    "tags": ["minimal", "leather", "cardholder"]
+  },
+  {
+    "id": "item_27",
+    "name": "Wool Blend Scarf",
+    "category": "accessories",
+    "color": ["grey", "camel", "navy"],
+    "price": 34.90,
+    "image_url": "https://images.unsplash.com/photo-1520903928273-0f44b2a2edd5?w=400&q=80",
+    "tags": ["warm", "winter", "accessories"]
+  },
+  {
+    "id": "item_28",
+    "name": "Corduroy Overshirt",
+    "category": "tops",
+    "color": ["olive", "beige", "brown"],
+    "price": 49.90,
+    "image_url": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?w=400&q=80",
+    "tags": ["layering", "casual", "shirt"]
+  },
+  {
+    "id": "item_29",
+    "name": "Athletic Crew Socks (3-pack)",
+    "category": "accessories",
+    "color": ["white", "black"],
+    "price": 14.90,
+    "image_url": "https://images.unsplash.com/photo-1582966772680-860e372bb558?w=400&q=80",
+    "tags": ["sport", "everyday", "socks"]
+  },
+  {
+    "id": "item_30",
+    "name": "Polarized Sunglasses",
+    "category": "accessories",
+    "color": ["black", "tortoise"],
+    "price": 39.90,
+    "image_url": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400&q=80",
+    "tags": ["accessories", "sun", "summer"]
   }
 ]

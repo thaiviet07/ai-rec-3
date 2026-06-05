@@ -96,15 +96,15 @@ doc.text('Antigravity Deepmind & partners', 70, 775);
 // ----------------------------------------------------
 doc.addPage();
 
-doc.fillColor(PRIMARY).font(HELVETICA_BOLD).fontSize(18).text('1. Dual-Study Architecture & Landing Portal', 50, 60);
+doc.fillColor(PRIMARY).font(HELVETICA_BOLD).fontSize(18).text('1. Direct-Entry Architecture & Participant Flow', 50, 60);
 doc.fontSize(10).font(HELVETICA).fillColor(TEXT_DARK).text(
-  'The platform is designed to run two separate behavioral research studies concurrently. Rather than using fragile URL parameters, the entrance point is centralized in a sleek Apple-esque study selector page.',
+  'The platform is configured to direct participants instantly to the AI shopping assistant session. Instead of manual study selection, opening the application automatically generates a unique session ID, counterbalances the participant into one of the four experimental conditions at a 25/25/25/25 ratio, and redirects directly to the chat interface.',
   50,
   90,
   { width: 495, lineGap: 4 }
 );
 
-// Vector drawing of the dual-study structure
+// Vector drawing of the single-study structure
 doc.save();
 doc.translate(50, 150);
 
@@ -112,25 +112,34 @@ doc.translate(50, 150);
 doc.rect(0, 0, 495, 120).fill('#FFFFFF');
 doc.rect(0, 0, 495, 120).strokeColor(BORDER_COLOR).lineWidth(0.5).stroke();
 
-// S1 Box
-doc.rect(20, 20, 210, 80).fill('#EFF6FF');
-doc.rect(20, 20, 210, 80).strokeColor('#BFDBFE').lineWidth(1).stroke();
-doc.fillColor('#2563EB').font(HELVETICA_BOLD).fontSize(11).text('STUDY 1: AUTONOMY', 35, 35);
-doc.fillColor(TEXT_DARK).font(HELVETICA).fontSize(8).text('- 2 Counterbalanced Scenarios\n- Low Autonomy (Recommend)\n- High Autonomy (Auto-Purchase)', 35, 55, { lineGap: 3 });
+// Draw 4 condition boxes
+doc.rect(10, 20, 110, 80).fill('#EFF6FF');
+doc.rect(10, 20, 110, 80).strokeColor('#BFDBFE').lineWidth(1).stroke();
+doc.fillColor('#2563EB').font(HELVETICA_BOLD).fontSize(8).text('CONDITION 1', 18, 30);
+doc.fillColor(TEXT_DARK).font(HELVETICA).fontSize(6.5).text('High Autonomy\n+ Teaming\n(25% distribution)', 18, 45, { lineGap: 2 });
 
-// S2 Box
-doc.rect(265, 20, 210, 80).fill('#FDF2F8');
-doc.rect(265, 20, 210, 80).strokeColor('#FBCFE8').lineWidth(1).stroke();
-doc.fillColor('#DB2777').font(HELVETICA_BOLD).fontSize(11).text('STUDY 2: COLLABORATION', 280, 35);
-doc.fillColor(TEXT_DARK).font(HELVETICA).fontSize(8).text('- 4 Counterbalanced Scenarios\n- Autonomy (Low/High)\n- Collaborative Teaming (Yes/No)', 280, 55, { lineGap: 3 });
+doc.rect(130, 20, 110, 80).fill('#F0FDF4');
+doc.rect(130, 20, 110, 80).strokeColor('#BBF7D0').lineWidth(1).stroke();
+doc.fillColor('#16A34A').font(HELVETICA_BOLD).fontSize(8).text('CONDITION 2', 138, 30);
+doc.fillColor(TEXT_DARK).font(HELVETICA).fontSize(6.5).text('High Autonomy\n+ Solo AI\n(25% distribution)', 138, 45, { lineGap: 2 });
+
+doc.rect(250, 20, 110, 80).fill('#FEF9C3');
+doc.rect(250, 20, 110, 80).strokeColor('#FEF08A').lineWidth(1).stroke();
+doc.fillColor('#CA8A04').font(HELVETICA_BOLD).fontSize(8).text('CONDITION 3', 258, 30);
+doc.fillColor(TEXT_DARK).font(HELVETICA).fontSize(6.5).text('Low Autonomy\n+ Teaming\n(25% distribution)', 258, 45, { lineGap: 2 });
+
+doc.rect(370, 20, 110, 80).fill('#FDF2F8');
+doc.rect(370, 20, 110, 80).strokeColor('#FBCFE8').lineWidth(1).stroke();
+doc.fillColor('#DB2777').font(HELVETICA_BOLD).fontSize(8).text('CONDITION 4', 378, 30);
+doc.fillColor(TEXT_DARK).font(HELVETICA).fontSize(6.5).text('Low Autonomy\n+ Solo AI\n(25% distribution)', 378, 45, { lineGap: 2 });
 
 doc.restore();
 
 doc.fillColor(PRIMARY).font(HELVETICA_BOLD).fontSize(13).text('Portal Features', 50, 295);
 doc.fontSize(9.5).font(HELVETICA).fillColor(TEXT_DARK).text(
-  '• Real-time Counterbalance Meter: A dynamic colored progress segment that shows researchers the distribution of respondents across all available scenarios.\n' +
-  '• Auto-Resuming Flow: If a user temporarily closes the page, local storage memory locks their initial assignment. Clicking "Continue Study" brings them instantly back to their active chat session without altering counterbalance counts.\n' +
-  '• Wallet Reset Telemetry: When starting a new session, the user\'s wallet balance automatically resets to $1,000.00, and previous local chat histories are wiped clean to prevent carry-over effects.',
+  '• Real-time Counterbalance Routing: Opening the application automatically triggers the counterbalance checks, guaranteeing that participant counts across the 4 conditions stay exactly balanced (25:25:25:25).\n' +
+  '• Suggested Task Prompt: The chat interface displays a premium clickable Suggested Task chip containing the standard prompt. Tapping it submits it instantly, eliminating human keyboard entry error.\n' +
+  '• Wallet Reset Telemetry: When starting a session, the user\'s wallet balance automatically resets to $1,002.00, and previous local chat histories are wiped clean to prevent carry-over effects.',
   50,
   315,
   { width: 495, lineGap: 6 }
@@ -139,7 +148,7 @@ doc.fontSize(9.5).font(HELVETICA).fillColor(TEXT_DARK).text(
 // Balanced Randomization Section
 doc.fillColor(PRIMARY).font(HELVETICA_BOLD).fontSize(14).text('2. Round-Robin Randomization Algorithm', 50, 420);
 doc.fontSize(10).font(HELVETICA).fillColor(TEXT_DARK).text(
-  'To guarantee exact statistical cell parity (e.g., 50/50 for Study 1, and 25/25/25/25 for Study 2), the application implements a round-robin counterbalance algorithm in src/services/randomizationService.ts. Instead of simple math-random (which leads to highly unequal groups at small sample sizes), the system follows a deterministic assignment queue:',
+  'To guarantee exact statistical cell parity (25/25/25/25 across the 4 conditions), the application implements a round-robin counterbalance algorithm in src/services/randomizationService.ts. Instead of simple math-random (which leads to highly unequal groups at small sample sizes), the system follows a deterministic assignment queue:',
   50,
   445,
   { width: 495, lineGap: 4 }
@@ -153,15 +162,16 @@ doc.fillColor(ACCENT_BLUE).font(HELVETICA_BOLD).fontSize(9).text('ALGORITHM FLOW
 
 const codeSample = 
 `// 1. Fetch historical counts from persistent memory
-const counts = JSON.parse(localStorage.getItem('study_counts') || '{"S1_LOW":0,"S1_HIGH":0}');
+const counts = JSON.parse(localStorage.getItem('study2_counter') || '{"S2_HL":0,"S2_HH":0,"S2_LL":0,"S2_LH":0}');
 
-// 2. Identify the scenario with the lowest respondent count
-const scenario = counts.S1_LOW <= counts.S1_HIGH ? 'S1_LOW' : 'S1_HIGH';
+// 2. Identify the scenario candidates with the minimum count
+const minCount = Math.min(counts.S2_HL, counts.S2_HH, counts.S2_LL, counts.S2_LH);
+const candidates = ['S2_HL', 'S2_HH', 'S2_LL', 'S2_LH'].filter(s => counts[s] === minCount);
 
 // 3. Assign user, increment cell, and lock assignment in persistent session
-counts[scenario]++;
-localStorage.setItem('study_counts', JSON.stringify(counts));`;
-
+const assigned = candidates[Math.floor(Math.random() * candidates.length)];
+counts[assigned]++;
+localStorage.setItem('study2_counter', JSON.stringify(counts));`;
 doc.fillColor('#0F172A').font('Courier').fontSize(8.5).text(codeSample, 65, 555, { lineGap: 3 });
 
 // ----------------------------------------------------
@@ -316,6 +326,151 @@ doc.fontSize(9.5).font(HELVETICA).fillColor(TEXT_DARK).text(
   415,
   { width: 495, lineGap: 6 }
 );
+
+// ----------------------------------------------------
+// 5. PAGE 5: EXPERIMENTAL CONDITIONS SPECIFICATION
+// ----------------------------------------------------
+doc.addPage();
+
+doc.fillColor(PRIMARY).font(HELVETICA_BOLD).fontSize(18).text('6. Experimental Conditions & Simulation Flow', 50, 60);
+doc.fontSize(10).font(HELVETICA).fillColor(TEXT_DARK).text(
+  'The platform evaluates four experimental conditions crossing AI autonomy with human-AI teaming. The following models the agent response templates, matched criteria, and wallet deduction telemetry for each condition:',
+  50,
+  90,
+  { width: 495, lineGap: 4 }
+);
+
+// Draw 4 cards in a 2x2 grid layout
+// Column 1 X: 50, Column 2 X: 310. Width: 235
+// Row 1 Y: 135, Row 2 Y: 435. Height: 275
+
+// --- CARD 1: CONDITION 1 (Top Left) ---
+doc.save();
+doc.rect(50, 135, 235, 275).fill('#FFFFFF');
+doc.rect(50, 135, 235, 275).strokeColor(BORDER_COLOR).lineWidth(0.5).stroke();
+doc.rect(50, 135, 235, 25).fill(PRIMARY);
+doc.fillColor('#FFFFFF').font(HELVETICA_BOLD).fontSize(7.5).text('COND 1: HIGH AUTONOMY + TEAMING', 58, 145);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('AI Response Message Template:', 58, 170);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  'Based on your request, the AI agent analyzed the available options and selected the best match: a versatile brown jacket in size M for $47.90. Ngoc Linh, your human shopping agent, also reviewed the choice and confirmed that it perfectly fits your request and stays under your $50 budget. Since both the AI agent and Ngoc Linh confirmed it as a perfect match, the purchase has been completed automatically using your wallet balance.',
+  58,
+  182,
+  { width: 219, lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('Match Reasons:', 58, 280);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  '• Comfort Brown color\n• Size M\n• Within budget\n• Reviewed by Ngoc Linh',
+  58,
+  292,
+  { lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('System Action & Telemetry:', 58, 345);
+doc.font(HELVETICA_OBlique).fontSize(7).fillColor(ACCENT_PINK).text(
+  'Purchase completed automatically by AI with human-agent review. New balance updated to $954.10.',
+  58,
+  357,
+  { width: 219, lineGap: 2 }
+);
+doc.restore();
+
+// --- CARD 2: CONDITION 2 (Top Right) ---
+doc.save();
+doc.rect(310, 135, 235, 275).fill('#FFFFFF');
+doc.rect(310, 135, 235, 275).strokeColor(BORDER_COLOR).lineWidth(0.5).stroke();
+doc.rect(310, 135, 235, 25).fill('#1E3A8A');
+doc.fillColor('#FFFFFF').font(HELVETICA_BOLD).fontSize(7.5).text('COND 2: HIGH AUTONOMY + SOLO AI', 318, 145);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('AI Response Message Template:', 318, 170);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  'Based on your request, the AI agent analyzed the available options and selected the best match: a versatile brown jacket in size M for $47.90. Since it perfectly matches your request and stays under your $50 budget, the purchase has been completed automatically using your wallet balance.',
+  318,
+  182,
+  { width: 219, lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('Match Reasons:', 318, 280);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  '• Comfort Brown color\n• Size M\n• Within budget',
+  318,
+  292,
+  { lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('System Action & Telemetry:', 318, 345);
+doc.font(HELVETICA_OBlique).fontSize(7).fillColor(ACCENT_PINK).text(
+  'Purchase completed automatically by AI. New balance updated to $954.10.',
+  318,
+  357,
+  { width: 219, lineGap: 2 }
+);
+doc.restore();
+
+// --- CARD 3: CONDITION 3 (Bottom Left) ---
+doc.save();
+doc.rect(50, 435, 235, 275).fill('#FFFFFF');
+doc.rect(50, 435, 235, 275).strokeColor(BORDER_COLOR).lineWidth(0.5).stroke();
+doc.rect(50, 435, 235, 25).fill(ACCENT_BLUE);
+doc.fillColor('#FFFFFF').font(HELVETICA_BOLD).fontSize(7.5).text('COND 3: LOW AUTONOMY + TEAMING', 58, 445);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('AI Response Message Template:', 58, 470);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  'Based on your request, the AI agent analyzed the available options and found a strong match: a versatile brown jacket in size M for $47.90. Ngoc Linh, your human shopping agent, also reviewed the recommendation and confirmed that it fits your request and stays under your $50 budget. Since the system does not complete purchases without your approval, please confirm whether you would like to proceed with payment.',
+  58,
+  482,
+  { width: 219, lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('Match Reasons:', 58, 580);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  '• Comfort Brown color\n• Size M\n• Within budget\n• Reviewed by Ngoc Linh',
+  58,
+  592,
+  { lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('System Action & Telemetry:', 58, 645);
+doc.font(HELVETICA_OBlique).fontSize(7).fillColor(ACCENT_PINK).text(
+  'User confirmation needed. Your wallet balance will be updated to $954.10 only if you approve the purchase.',
+  58,
+  657,
+  { width: 219, lineGap: 2 }
+);
+doc.restore();
+
+// --- CARD 4: CONDITION 4 (Bottom Right) ---
+doc.save();
+doc.rect(310, 435, 235, 275).fill('#FFFFFF');
+doc.rect(310, 435, 235, 275).strokeColor(BORDER_COLOR).lineWidth(0.5).stroke();
+doc.rect(310, 435, 235, 25).fill('#0EA5E9');
+doc.fillColor('#FFFFFF').font(HELVETICA_BOLD).fontSize(7.5).text('COND 4: LOW AUTONOMY + SOLO AI', 318, 445);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('AI Response Message Template:', 318, 470);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  'Based on your request, the AI agent analyzed the available options and found a recommended match: a versatile brown jacket in size M for $47.90. It matches your preferred color, size, usual style, and budget. Since the system does not complete purchases without your approval, please confirm whether you would like to purchase this item.',
+  318,
+  482,
+  { width: 219, lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('Match Reasons:', 318, 580);
+doc.font(HELVETICA).fontSize(7).fillColor(TEXT_MUTED).text(
+  '• Comfort Brown color\n• Size M\n• Within budget',
+  318,
+  592,
+  { lineGap: 2 }
+);
+
+doc.fillColor(TEXT_DARK).font(HELVETICA_BOLD).fontSize(8).text('System Action & Telemetry:', 318, 645);
+doc.font(HELVETICA_OBlique).fontSize(7).fillColor(ACCENT_PINK).text(
+  'User confirmation needed. Your wallet balance will be updated to $954.10 only if you approve the purchase.',
+  318,
+  657,
+  { width: 219, lineGap: 2 }
+);
+doc.restore();
 
 // ----------------------------------------------------
 // PAGE NUMBERS CALCULATION & DECORATION WRITING

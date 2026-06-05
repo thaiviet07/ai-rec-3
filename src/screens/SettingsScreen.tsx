@@ -10,6 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { useAppStore } from '../store/useAppStore';
 
 export default function SettingsScreen() {
@@ -200,6 +201,25 @@ export default function SettingsScreen() {
         )}
       </View>
 
+      {/* Research Dashboard Button */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Research Administration</Text>
+        <TouchableOpacity 
+          style={styles.dashboardBtn} 
+          onPress={() => router.push('/dashboard')}
+          activeOpacity={0.7}
+        >
+          <View style={styles.dashboardIcon}>
+            <Ionicons name="bar-chart-outline" size={18} color="#EA580C" />
+          </View>
+          <View style={styles.dashboardTextWrapper}>
+            <Text style={styles.dashboardTitle}>Launch Analytics Dashboard</Text>
+            <Text style={styles.dashboardDesc}>View real-time counterbalance counts and export session telemetry.</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={16} color="#EA580C" />
+        </TouchableOpacity>
+      </View>
+
       {/* About Box */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>About</Text>
@@ -266,7 +286,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     color: '#0F172A',
     fontSize: 12,
-    fontWeight: '850',
+    fontWeight: '800',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 10,
@@ -422,7 +442,7 @@ const styles = StyleSheet.create({
   txName: {
     color: '#0F172A',
     fontSize: 13,
-    fontWeight: '850',
+    fontWeight: '800',
   },
   txMeta: {
     color: '#64748B',
@@ -610,5 +630,43 @@ const styles = StyleSheet.create({
   },
   budgetChipTextActive: {
     color: '#FFFFFF',
+  },
+  dashboardBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: '#FFF7ED',
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1.5,
+    borderColor: '#FFEDD5',
+    shadowColor: '#EA580C',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 8,
+    elevation: 1,
+  },
+  dashboardIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFEDD5',
+  },
+  dashboardTextWrapper: {
+    flex: 1,
+    gap: 2,
+  },
+  dashboardTitle: {
+    color: '#9A3412',
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  dashboardDesc: {
+    color: '#C2410C',
+    fontSize: 11,
+    lineHeight: 16,
+    fontWeight: '600',
   },
 });

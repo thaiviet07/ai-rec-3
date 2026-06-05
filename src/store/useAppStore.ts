@@ -37,7 +37,7 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  walletBalance: 1000.00,
+  walletBalance: 1002.00,
   transactionHistory: [],
   apiKey: 'sk-ant-api03-UnpPkerNR-RZrIJrxCFD6MWVfJpFOBbIL-' + 'xlMd-ukcefi6H0wCBzPHYwdQLXDiR69puRHOD8tQhbsYUT8h4FBw-txypNgAA',
   currentScenario: 'S1',
@@ -73,7 +73,7 @@ export const useAppStore = create<AppState>((set) => ({
 
   resetWallet: () =>
     set({
-      walletBalance: 1000.00,
+      walletBalance: 1002.00,
       transactionHistory: [],
       budgetLimit: 300.00,
       cart: [],

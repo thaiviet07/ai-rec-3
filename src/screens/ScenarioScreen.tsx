@@ -366,6 +366,15 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
             autoPurchased: true,
           },
         ]);
+
+        const purchaseStatusMsg = config.teaming
+          ? `Purchase completed automatically by AI with human-agent review. New balance updated to $${Math.max(0, walletBalance - product.price).toFixed(2)}.`
+          : `Purchase completed automatically by AI. New balance updated to $${Math.max(0, walletBalance - product.price).toFixed(2)}.`;
+        
+        addMessage({
+          role: 'system',
+          content: purchaseStatusMsg,
+        });
       } else {
         setDecisions((prev) => [
           ...prev,
@@ -378,6 +387,11 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
             autoPurchased: false,
           },
         ]);
+
+        addMessage({
+          role: 'system',
+          content: `User confirmation needed. Your wallet balance will be updated to $${Math.max(0, walletBalance - product.price).toFixed(2)} only if you approve the purchase.`,
+        });
       }
     } catch (err: any) {
       addMessage({
@@ -502,8 +516,18 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
       await new Promise((resolve) => setTimeout(resolve, 1600));
 
       // Find alternative items in the same category
-      const options = catalog.filter((p) => p.category === declinedProduct?.category && p.id !== declinedProduct?.id);
-      const altProduct = options[Math.floor(Math.random() * options.length)] || catalog.find((p) => p.id !== declinedProduct?.id) || catalog[0];
+      const options = catalog.filter((p) => p.id !== declinedProduct?.id);
+      if (options.length === 0) {
+        addMessage({
+          role: 'assistant',
+          content: `No other products matching your criteria are currently available in the catalog.`,
+        });
+        setIsLoading(false);
+        scrollToBottom();
+        return;
+      }
+
+      const altProduct = options[Math.floor(Math.random() * options.length)];
 
       const msgId = addMessage({
         role: 'assistant',
@@ -588,6 +612,26 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
           onContentSizeChange={scrollToBottom}
         >
           {renderContent()}
+          {messages.length === 1 && (
+            <View style={styles.suggestionsContainer}>
+              <Text style={styles.suggestionsHeader}>Suggested Task</Text>
+              <TouchableOpacity
+                style={styles.suggestionChip}
+                onPress={() => {
+                  handleSend("I'm looking for a brown jacket, size M, budget under $50. Find something versatile that fits my usual style and handle the purchase if it's a perfect match.");
+                }}
+                activeOpacity={0.7}
+              >
+                <View style={styles.suggestionBadge}>
+                  <Ionicons name="sparkles" size={13} color="#2563EB" />
+                  <Text style={styles.suggestionBadgeText}>Tap to auto-send prompt</Text>
+                </View>
+                <Text style={styles.suggestionText}>
+                  "I'm looking for a brown jacket, size M, budget under $50. Find something versatile that fits my usual style and handle the purchase if it's a perfect match."
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           {isLoading && !isProcessing && <ThinkingIndicator />}
           {isProcessing && (
             <View style={[styles.processingBox, { borderColor: config.accentColor + '20' }]}>
@@ -914,6 +958,55 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: APPLE_FONT,
+  },
+  suggestionsContainer: {
+    marginHorizontal: 16,
+    marginVertical: 12,
+    gap: 8,
+  },
+  suggestionsHeader: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#64748B',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    fontFamily: APPLE_FONT,
+  },
+  suggestionChip: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    gap: 8,
+    shadowColor: '#0F172A',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 8,
+    elevation: 1,
+  },
+  suggestionBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#EFF6FF',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  suggestionBadgeText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#2563EB',
+    fontFamily: APPLE_FONT,
+  },
+  suggestionText: {
+    fontSize: 14,
+    color: '#334155',
+    fontWeight: '600',
+    lineHeight: 20,
     fontFamily: APPLE_FONT,
   },
 });

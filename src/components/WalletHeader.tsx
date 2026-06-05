@@ -75,12 +75,10 @@ export default function WalletHeader({ scenarioLabel, scenarioColor }: WalletHea
           <Ionicons name="refresh-outline" size={16} color="#64748B" />
         </TouchableOpacity>
 
-        {/* Settings button — only for non-study scenarios */}
-        {!isStudyScenario && (
-          <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/settings')} accessibilityLabel="Open chat settings">
-            <Ionicons name="settings-outline" size={16} color="#64748B" />
-          </TouchableOpacity>
-        )}
+        {/* Settings button — always visible to allow navigating to Settings & Dashboard */}
+        <TouchableOpacity style={styles.settingsBtn} onPress={() => router.push('/settings')} accessibilityLabel="Open chat settings">
+          <Ionicons name="settings-outline" size={16} color="#64748B" />
+        </TouchableOpacity>
       </View>
     </View>
   );
