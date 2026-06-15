@@ -1,5 +1,5 @@
-const KNACK_APP_ID = '6a156ad4e0634c315206694e';
-const KNACK_API_KEY = '6c8cc45b-54e7-48de-b374-48225f571a3b';
+const KNACK_APP_ID = '6a2fe57bf1716ec43d93998f';
+const KNACK_API_KEY = '821431f7-a6c9-457f-9828-4b90110119fb';
 const KNACK_OBJECT_ID = 'object_3'; // Table 1
 const KNACK_FIELD_ID = 'field_23'; // Name (Short text)
 

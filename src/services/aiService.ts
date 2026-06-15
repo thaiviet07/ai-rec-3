@@ -178,10 +178,10 @@ Match the user's request to the most relevant product. Always use a real product
   // Check if we are running online in production on Vercel or in local Metro dev mode
   const isVercel = typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
 
-  // Use Vercel's secure built-in server-side API proxy function in production, or corsproxy.io in local Metro dev mode
+  // Use Vercel's secure built-in server-side API proxy function in production, or local Node proxy in local dev mode
   const apiEndpoint = isVercel
     ? `${window.location.origin}/api/chat`
-    : 'https://corsproxy.io/?url=https://api.openai.com/v1/chat/completions';
+    : 'http://localhost:3002';
 
   const headers: Record<string, string> = {
     'content-type': 'application/json',
