@@ -18,7 +18,7 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const apiKey = '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';
+    const apiKey = process.env.OPENAI_API_KEY || process.env.EXPO_PUBLIC_OPENAI_API_KEY || '';
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',

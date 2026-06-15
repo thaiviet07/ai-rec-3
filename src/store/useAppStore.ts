@@ -39,7 +39,7 @@ interface AppState {
 export const useAppStore = create<AppState>((set) => ({
   walletBalance: 1002.00,
   transactionHistory: [],
-  apiKey: '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',
+  apiKey: process.env.EXPO_PUBLIC_OPENAI_API_KEY || '',
   currentScenario: 'S1',
   budgetLimit: 300.00,
   cart: [],
