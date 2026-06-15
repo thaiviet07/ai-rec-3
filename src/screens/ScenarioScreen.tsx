@@ -215,7 +215,7 @@ export default function ScenarioScreen({ scenarioId }: ScenarioScreenProps) {
     if (!apiKey) {
       addMessage({
         role: 'assistant',
-        content: 'Please configure your Anthropic API key in Settings first.',
+        content: 'Please configure your OpenAI API key in Settings first.',
       });
       return;
     }
