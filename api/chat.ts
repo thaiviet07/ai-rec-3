@@ -5,7 +5,7 @@ export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, x-api-key, anthropic-version, anthropic-dangerous-direct-browser-access'
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization'
   );
 
   if (req.method === 'OPTIONS') {
@@ -18,24 +18,15 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { system, messages, tools, tool_choice } = req.body;
-    const apiKey = 'sk-ant-api03-UnpPkerNR-RZrIJrxCFD6MWVfJpFOBbIL-' + 'xlMd-ukcefi6H0wCBzPHYwdQLXDiR69puRHOD8tQhbsYUT8h4FBw-txypNgAA';
+    const apiKey = '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';
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+        'Authorization': `Bearer ${apiKey}`,
         'content-type': 'application/json',
       },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1024,
-        system,
-        messages,
-        tools,
-        tool_choice,
-      }),
+      body: JSON.stringify(req.body),
     });
 
     const resText = await response.text();

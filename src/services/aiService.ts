@@ -1,4 +1,3 @@
-import Anthropic from '@anthropic-ai/sdk';
 import catalog from '../catalog.json';
 
 // Original scenarios (backward compatible)
@@ -125,32 +124,35 @@ For any other items in the catalog:
 - Return 3-4 natural match reasons relevant to that item including "Reviewed by Ngoc Linh".`,
 };
 
-const SHOPPING_TOOL: Anthropic.Tool = {
-  name: 'execute_shopping_decision',
-  description: 'Searches the local catalog and dictates the UI action based on the assigned autonomy level.',
-  input_schema: {
-    type: 'object',
-    properties: {
-      matched_product_id: {
-        type: 'string',
-        description: 'The ID of the best matching product from the catalog',
+const SHOPPING_TOOL = {
+  type: 'function' as const,
+  function: {
+    name: 'execute_shopping_decision',
+    description: 'Searches the local catalog and dictates the UI action based on the assigned autonomy level.',
+    parameters: {
+      type: 'object',
+      properties: {
+        matched_product_id: {
+          type: 'string',
+          description: 'The ID of the best matching product from the catalog',
+        },
+        action_type: {
+          type: 'string',
+          enum: ['recommend_only', 'auto_purchase'],
+          description: 'The action to take based on the autonomy level',
+        },
+        ai_message: {
+          type: 'string',
+          description: 'The message to display to the user explaining the decision',
+        },
+        match_reasons: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'List of reasons why this product was selected',
+        },
       },
-      action_type: {
-        type: 'string',
-        enum: ['recommend_only', 'auto_purchase'],
-        description: 'The action to take based on the autonomy level',
-      },
-      ai_message: {
-        type: 'string',
-        description: 'The message to display to the user explaining the decision',
-      },
-      match_reasons: {
-        type: 'array',
-        items: { type: 'string' },
-        description: 'List of reasons why this product was selected',
-      },
+      required: ['matched_product_id', 'action_type', 'ai_message', 'match_reasons'],
     },
-    required: ['matched_product_id', 'action_type', 'ai_message', 'match_reasons'],
   },
 };
 
@@ -179,31 +181,28 @@ Match the user's request to the most relevant product. Always use a real product
   // Use Vercel's secure built-in server-side API proxy function in production, or corsproxy.io in local Metro dev mode
   const apiEndpoint = isVercel
     ? `${window.location.origin}/api/chat`
-    : 'https://corsproxy.io/?url=https://api.anthropic.com/v1/messages';
+    : 'https://corsproxy.io/?url=https://api.openai.com/v1/chat/completions';
 
   const headers: Record<string, string> = {
     'content-type': 'application/json',
   };
 
   if (!isVercel) {
-    // Only send direct Anthropic headers when calling the CORS proxy in local development
-    headers['x-api-key'] = apiKey;
-    headers['anthropic-version'] = '2023-06-01';
-    headers['anthropic-dangerous-direct-browser-access'] = 'true';
+    // Only send direct OpenAI headers when calling the CORS proxy in local development
+    headers['Authorization'] = `Bearer ${apiKey}`;
   }
 
   const response = await fetch(apiEndpoint, {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      system: systemPrompt,
+      model: 'gpt-4o-mini',
       messages: [
+        { role: 'system', content: systemPrompt },
         { role: 'user', content: userMessage },
       ],
       tools: [SHOPPING_TOOL],
-      tool_choice: { type: 'tool', name: 'execute_shopping_decision' },
+      tool_choice: { type: 'function', function: { name: 'execute_shopping_decision' } },
     }),
   });
 
@@ -213,20 +212,34 @@ Match the user's request to the most relevant product. Always use a real product
   }
 
   const resJson = await response.json();
-  const content = resJson.content;
+  const choices = resJson.choices;
 
-  if (!Array.isArray(content)) {
-    throw new Error('API response content is not an array.');
+  if (!Array.isArray(choices) || choices.length === 0) {
+    throw new Error('API response choices is not a non-empty array.');
   }
 
-  const toolCall = content.find(
-    (c: any) => c.type === 'tool_use' && c.name === 'execute_shopping_decision'
+  const message = choices[0].message;
+  if (!message) {
+    throw new Error('No message returned from API.');
+  }
+
+  const toolCalls = message.tool_calls;
+  if (!Array.isArray(toolCalls) || toolCalls.length === 0) {
+    throw new Error('AI did not return a valid tool call.');
+  }
+
+  const toolCall = toolCalls.find(
+    (tc: any) => tc.type === 'function' && tc.function.name === 'execute_shopping_decision'
   );
 
   if (!toolCall) {
     throw new Error('AI did not return a valid shopping decision tool use.');
   }
 
-  const decision = toolCall.input as unknown as ShoppingDecision;
-  return decision;
+  try {
+    const decision = JSON.parse(toolCall.function.arguments) as ShoppingDecision;
+    return decision;
+  } catch (parseErr) {
+    throw new Error('Failed to parse shopping decision arguments.');
+  }
 }

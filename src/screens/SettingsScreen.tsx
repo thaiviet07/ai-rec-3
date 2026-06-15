@@ -59,20 +59,20 @@ export default function SettingsScreen() {
         </View>
       </View>
 
-      {/* Anthropic Key Config */}
+      {/* OpenAI Key Config */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Anthropic API Key</Text>
+        <Text style={styles.sectionTitle}>OpenAI API Key</Text>
         <Text style={styles.sectionDesc}>
-          Your key is saved locally in encrypted on-device storage. It is only utilized directly with the official Anthropic API endpoint.
+          Your key is saved locally in encrypted on-device storage. It is only utilized directly with the official OpenAI API endpoint.
         </Text>
         <View style={styles.keyRow}>
           <TextInput
-            nativeID="anthropic-api-key"
-            accessibilityLabel="Anthropic API key"
+            nativeID="openai-api-key"
+            accessibilityLabel="OpenAI API key"
             style={styles.keyInput}
             value={keyInput}
             onChangeText={setKeyInput}
-            placeholder="sk-ant-..."
+            placeholder="sk-proj-..."
             placeholderTextColor="#94A3B8"
             secureTextEntry={!showKey}
             autoCapitalize="none"
@@ -230,7 +230,7 @@ export default function SettingsScreen() {
           </Text>
           <View style={styles.modelBadge}>
             <Ionicons name="sparkles" size={12} color="#2563EB" />
-            <Text style={styles.modelText}>claude-haiku-4.5 • Strict Tool Calling</Text>
+            <Text style={styles.modelText}>gpt-4o-mini • Strict Tool Calling</Text>
           </View>
         </View>
       </View>
